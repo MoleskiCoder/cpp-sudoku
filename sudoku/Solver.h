@@ -17,14 +17,6 @@ public:
 	Solver(Grid<int>& start);
 	bool solve();
 
-	//Solver& operator=(const Solver& rhs)
-	//{
-	//	grid = rhs.grid;
-	//	width = rhs.width;
-	//	height = rhs.height;
-	//	return *this;
-	//}
-
 private:
 	bool findUnassignedLocation(Coordinate& coordinate) const;
 	bool isAvailable(const Coordinate& coordinate, int number) const;
