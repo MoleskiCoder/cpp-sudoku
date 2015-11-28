@@ -81,9 +81,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Solver.h" />
