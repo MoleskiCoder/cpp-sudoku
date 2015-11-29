@@ -3,6 +3,13 @@
 
 #include "SudokuGrid.h"
 
+/**
+* From: https://see.stanford.edu/materials/icspacs106b/H19-RecBacktrackExamples.pdf
+*
+* A straightforward port from the original C to Java to C++!
+*
+*/
+
 Solver::Solver(Grid<int>& start)
 :	grid(start),
 	width(grid.getWidth()),
