@@ -31,51 +31,29 @@ Solver::Solver(Grid<int>& start)
 * been examined and none worked out, return false to backtrack to previous
 * decision point.
 */
-bool Solver::solve()
+bool Solver::solve(const int offset)
 {
-	Coordinate coordinate;
-	if (!findUnassignedLocation(coordinate))
-	{
+	if (offset == SudokuGrid::CELL_COUNT)
 		return true; // success!
-	}
-	for (auto number = 1; number < 10; ++number) // consider digits 1 to 9
+
+	const Coordinate coordinate(offset % SudokuGrid::DIMENSION, offset / SudokuGrid::DIMENSION);
+
+	if (grid.get(coordinate) != SudokuGrid::UNASSIGNED)
+		return solve(offset + 1);
+
+	for (auto number = 0; number < SudokuGrid::DIMENSION + 1; ++number) // consider digits 1 to DIMENSION
 	{
 		if (isAvailable(coordinate, number)) // if looks promising,
 		{
 			grid.set(coordinate, number); // make tentative assignment
-			if (solve())
+			if (solve(offset + 1))
 			{
 				return true; // recur, if success, yay!
 			}
-			grid.set(coordinate, SudokuGrid::UNASSIGNED); // failure, unmake & try again
 		}
 	}
+	grid.set(coordinate, SudokuGrid::UNASSIGNED); // failure, unmake & try again
 	return false; // this triggers backtracking
-}
-
-/*
-* Function: findUnassignedLocation
-* --------------------------------
-* Searches the grid to find an entry that is still unassigned. If found,
-* the reference parameters row, column will be set the location that is
-* unassigned, and true is returned. If no unassigned entries remain, false
-* is returned.
-*/
-bool Solver::findUnassignedLocation(Coordinate& coordinate) const
-{
-	for (auto y = 0; y < height; ++y)
-	{
-		coordinate.setY(y);
-		for (auto x = 0; x < width; ++x)
-		{
-			coordinate.setX(x);
-			if (grid.get(coordinate) == SudokuGrid::UNASSIGNED)
-			{
-				return true;
-			}
-		}
-	}
-	return false;
 }
 
 /*
@@ -91,7 +69,7 @@ bool Solver::isAvailable(const Coordinate& coordinate, int number) const
 	auto y = coordinate.getY();
 	return !isUsedInRow(y, number)
 		&& !isUsedInColumn(x, number)
-		&& !isUsedInBox(x - x % 3, y - y % 3, number);
+		&& !isUsedInBox(x - x % SudokuGrid::BOX_DIMENSION, y - y % SudokuGrid::BOX_DIMENSION, number);
 }
 
 /*
@@ -134,13 +112,13 @@ bool Solver::isUsedInColumn(const int x, const int number) const
 * Function: isUsedInBox
 * -------------------
 * Returns a boolean which indicates whether any assigned entry
-* within the specified 3x3 box matches the given number.
+* within the specified BOX_DIMENSIONxBOX_DIMENSION box matches the given number.
 */
 bool Solver::isUsedInBox(const int boxStartX, const int boxStartY, const int number) const
 {
-	for (auto y = 0; y < 3; ++y)
+	for (auto y = 0; y < SudokuGrid::BOX_DIMENSION; ++y)
 	{
-		for (auto x = 0; x < 3; ++x)
+		for (auto x = 0; x < SudokuGrid::BOX_DIMENSION; ++x)
 		{
 			if (grid.get(x + boxStartX, y + boxStartY) == number)
 			{

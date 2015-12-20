@@ -15,7 +15,7 @@ private:
 
 public:
 	Solver(Grid<int>& start);
-	bool solve();
+	bool solve(int offset);
 
 private:
 	bool findUnassignedLocation(Coordinate& coordinate) const;

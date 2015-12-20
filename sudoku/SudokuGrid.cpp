@@ -11,10 +11,10 @@ SudokuGrid::SudokuGrid(const std::vector<int>& initial)
 std::string SudokuGrid::toString() const
 {
 	std::string output;
-	for (auto y = 0; y < getHeight(); ++y)
+	for (auto y = 0; y < HEIGHT; ++y)
 	{
 		output += "\n";
-		for (auto x = 0; x < getWidth(); ++x)
+		for (auto x = 0; x < WIDTH; ++x)
 		{
 			auto number = get(x, y);
 			output += ' ';
@@ -27,12 +27,12 @@ std::string SudokuGrid::toString() const
 				output += std::to_string(number);
 			}
 			output += ' ';
-			if ((x + 1) % 3 == 0 && (x + 1) < getWidth())
+			if ((x + 1) % BOX_DIMENSION == 0 && (x + 1) < WIDTH)
 			{
 				output += '|';
 			}
 		}
-		if ((y + 1) % 3 == 0 && (y + 1) < getHeight())
+		if ((y + 1) % BOX_DIMENSION == 0 && (y + 1) < HEIGHT)
 		{
 			output += "\n --------+---------+--------";
 		}

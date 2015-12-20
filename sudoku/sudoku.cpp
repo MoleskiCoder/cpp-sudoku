@@ -29,7 +29,7 @@ int _tmain(int, _TCHAR*[])
 	auto solver = Solver(puzzle);
 
 	auto start = std::clock();
-	bool solved = solver.solve();
+	bool solved = solver.solve(0);
 	auto finish = std::clock();
 
 	if (solved)

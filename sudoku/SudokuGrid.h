@@ -12,8 +12,11 @@ public:
 	enum
 	{
 		UNASSIGNED = 0,
-		WIDTH = 9,
-		HEIGHT = 9,
+		DIMENSION = 9,
+		CELL_COUNT = DIMENSION * DIMENSION,
+		WIDTH = DIMENSION,
+		HEIGHT = DIMENSION,
+		BOX_DIMENSION = 3
 	};
 };
 
