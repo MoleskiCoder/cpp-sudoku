@@ -6,8 +6,6 @@
 /**
 * From: https://see.stanford.edu/materials/icspacs106b/H19-RecBacktrackExamples.pdf
 *
-* A straightforward port from the original C to Java to C++!
-*
 */
 
 Solver::Solver(Grid<int>& start)
@@ -36,23 +34,22 @@ bool Solver::solve(const int offset)
 	if (offset == SudokuGrid::CELL_COUNT)
 		return true; // success!
 
-	const Coordinate coordinate(offset % SudokuGrid::DIMENSION, offset / SudokuGrid::DIMENSION);
-
-	if (grid.get(coordinate) != SudokuGrid::UNASSIGNED)
+	if (grid.get(offset) != SudokuGrid::UNASSIGNED)
 		return solve(offset + 1);
 
+	const Coordinate coordinate(offset % SudokuGrid::DIMENSION, offset / SudokuGrid::DIMENSION);
 	for (auto number = 0; number < SudokuGrid::DIMENSION + 1; ++number) // consider digits 1 to DIMENSION
 	{
 		if (isAvailable(coordinate, number)) // if looks promising,
 		{
-			grid.set(coordinate, number); // make tentative assignment
+			grid.set(offset, number); // make tentative assignment
 			if (solve(offset + 1))
 			{
 				return true; // recur, if success, yay!
 			}
 		}
 	}
-	grid.set(coordinate, SudokuGrid::UNASSIGNED); // failure, unmake & try again
+	grid.set(offset, SudokuGrid::UNASSIGNED); // failure, unmake & try again
 	return false; // this triggers backtracking
 }
 
@@ -80,9 +77,10 @@ bool Solver::isAvailable(const Coordinate& coordinate, int number) const
 */
 bool Solver::isUsedInRow(const int y, const int number) const
 {
+	auto offset = y * SudokuGrid::DIMENSION;
 	for (auto x = 0; x < width; ++x)
 	{
-		if (grid.get(x, y) == number)
+		if (grid.get(offset++) == number)
 		{
 			return true;
 		}
@@ -98,12 +96,14 @@ bool Solver::isUsedInRow(const int y, const int number) const
 */
 bool Solver::isUsedInColumn(const int x, const int number) const
 {
+	auto offset = x;
 	for (auto y = 0; y < height; ++y)
 	{
-		if (grid.get(x, y) == number)
+		if (grid.get(offset) == number)
 		{
 			return true;
 		}
+		offset += SudokuGrid::DIMENSION;
 	}
 	return false;
 }
@@ -116,11 +116,14 @@ bool Solver::isUsedInColumn(const int x, const int number) const
 */
 bool Solver::isUsedInBox(const int boxStartX, const int boxStartY, const int number) const
 {
-	for (auto y = 0; y < SudokuGrid::BOX_DIMENSION; ++y)
+	for (auto yOffset = 0; yOffset < SudokuGrid::BOX_DIMENSION; ++yOffset)
 	{
-		for (auto x = 0; x < SudokuGrid::BOX_DIMENSION; ++x)
+		auto x = boxStartX;
+		auto y = yOffset + boxStartY;
+		auto offset = x + y*SudokuGrid::DIMENSION;
+		for (auto xOffset = 0; xOffset < SudokuGrid::BOX_DIMENSION; ++xOffset)
 		{
-			if (grid.get(x + boxStartX, y + boxStartY) == number)
+			if (grid.get(offset++) == number)
 			{
 				return true;
 			}

@@ -37,22 +37,32 @@ public:
 
 	void set(const Coordinate& coordinate, const T value)
 	{
-		values[getOffset(coordinate)] = value;
+		set(getOffset(coordinate), value);
 	}
 
 	void set(const int x, const int y, const T value)
 	{
-		values[getOffset(x, y)] = value;
+		set(getOffset(x, y), value);
+	}
+
+	void set(const int offset, const T value)
+	{
+		values[offset] = value;
 	}
 
 	T get(const Coordinate& coordinate) const
 	{
-		return values[getOffset(coordinate)];
+		return get(getOffset(coordinate));
 	}
 
 	T get(const int x, const int y) const
 	{
-		return values[getOffset(x, y)];
+		return get(getOffset(x, y));
+	}
+
+	T get(const int offset) const
+	{
+		return values[offset];
 	}
 
 	int getOffset(const Coordinate& coordinate) const

@@ -18,7 +18,6 @@ public:
 	bool solve(int offset);
 
 private:
-	bool findUnassignedLocation(Coordinate& coordinate) const;
 	bool isAvailable(const Coordinate& coordinate, int number) const;
 	bool isUsedInRow(int y, int number) const;
 	bool isUsedInColumn(int x, int number) const;
