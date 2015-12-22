@@ -18,7 +18,7 @@ public:
 	bool solve(int offset);
 
 private:
-	bool isAvailable(const Coordinate& coordinate, int number) const;
+	bool isAvailable(int x, int y, int number) const;
 	bool isUsedInRow(int y, int number) const;
 	bool isUsedInColumn(int x, int number) const;
 	bool isUsedInBox(int boxStartX, int boxStartY, int number) const;

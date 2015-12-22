@@ -37,10 +37,12 @@ bool Solver::solve(const int offset)
 	if (grid.get(offset) != SudokuGrid::UNASSIGNED)
 		return solve(offset + 1);
 
-	const Coordinate coordinate(offset % SudokuGrid::DIMENSION, offset / SudokuGrid::DIMENSION);
+	auto x = offset % SudokuGrid::DIMENSION;
+	auto y = offset / SudokuGrid::DIMENSION;
+
 	for (auto number = 0; number < SudokuGrid::DIMENSION + 1; ++number) // consider digits 1 to DIMENSION
 	{
-		if (isAvailable(coordinate, number)) // if looks promising,
+		if (isAvailable(x, y, number)) // if looks promising,
 		{
 			grid.set(offset, number); // make tentative assignment
 			if (solve(offset + 1))
@@ -60,10 +62,8 @@ bool Solver::solve(const int offset)
 * number to the given row,column location. As assignment is legal if it that
 * number is not already used in the row, column, or box.
 */
-bool Solver::isAvailable(const Coordinate& coordinate, int number) const
+bool Solver::isAvailable(int x, int y, int number) const
 {
-	auto x = coordinate.getX();
-	auto y = coordinate.getY();
 	return !isUsedInRow(y, number)
 		&& !isUsedInColumn(x, number)
 		&& !isUsedInBox(x - x % SudokuGrid::BOX_DIMENSION, y - y % SudokuGrid::BOX_DIMENSION, number);
