@@ -7,8 +7,6 @@
 #include "SudokuGrid.h"
 #include "Solver.h"
 
-void work();
-
 int _tmain(int, _TCHAR*[])
 {
 	// http://www.telegraph.co.uk/news/science/science-news/9359579/Worlds-hardest-sudoku-can-you-crack-it.html
@@ -29,7 +27,7 @@ int _tmain(int, _TCHAR*[])
 	auto solver = Solver(puzzle);
 
 	auto start = std::clock();
-	bool solved = solver.solve(0);
+	bool solved = solver.solve();
 	auto finish = std::clock();
 
 	if (solved)

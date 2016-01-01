@@ -1,23 +1,29 @@
 #include "stdafx.h"
 #include "Solver.h"
 
-#include "SudokuGrid.h"
+#include <algorithm>
 
 /**
 * From: https://see.stanford.edu/materials/icspacs106b/H19-RecBacktrackExamples.pdf
 *
 */
 
-Solver::Solver(Grid<int>& start)
+Solver::Solver(SudokuGrid& start)
 :	grid(start),
 	width(grid.getWidth()),
 	height(grid.getHeight())
 {
 }
 
+bool Solver::solve()
+{
+	grid.eliminate();
+	return solve(0);
+}
+
 /*
 * Function: solve
-* ---------------------
+* ---------------
 * Takes a partially filled-in grid and attempts to assign values to all
 * unassigned locations in such a way to meet the requirements for sudoku
 * solution (non-duplication across rows, columns, and boxes). The function
@@ -29,23 +35,24 @@ Solver::Solver(Grid<int>& start)
 * been examined and none worked out, return false to backtrack to previous
 * decision point.
 */
-bool Solver::solve(const int offset)
+bool Solver::solve(const size_t index)
 {
-	if (offset == SudokuGrid::CELL_COUNT)
+	auto offset = grid.getOffset(index);
+
+	if (offset == -1)
 		return true; // success!
 
-	if (grid.get(offset) != SudokuGrid::UNASSIGNED)
-		return solve(offset + 1);
+	const auto& numbers = grid.getPossibilities(offset);
 
 	auto x = offset % SudokuGrid::DIMENSION;
 	auto y = offset / SudokuGrid::DIMENSION;
 
-	for (auto number = 0; number < SudokuGrid::DIMENSION + 1; ++number) // consider digits 1 to DIMENSION
+	for (auto number : numbers)
 	{
 		if (isAvailable(x, y, number)) // if looks promising,
 		{
 			grid.set(offset, number); // make tentative assignment
-			if (solve(offset + 1))
+			if (solve(index + 1))
 			{
 				return true; // recur, if success, yay!
 			}
@@ -116,9 +123,9 @@ bool Solver::isUsedInColumn(const int x, const int number) const
 */
 bool Solver::isUsedInBox(const int boxStartX, const int boxStartY, const int number) const
 {
+	auto x = boxStartX;
 	for (auto yOffset = 0; yOffset < SudokuGrid::BOX_DIMENSION; ++yOffset)
 	{
-		auto x = boxStartX;
 		auto y = yOffset + boxStartY;
 		auto offset = x + y*SudokuGrid::DIMENSION;
 		for (auto xOffset = 0; xOffset < SudokuGrid::BOX_DIMENSION; ++xOffset)

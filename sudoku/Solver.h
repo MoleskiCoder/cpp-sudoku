@@ -4,18 +4,19 @@
 * From: https://see.stanford.edu/materials/icspacs106b/H19-RecBacktrackExamples.pdf
 */
 
-#include "Grid.h"
+#include "SudokuGrid.h"
 
 class Solver
 {
 private:
-	Grid<int>& grid;
+	SudokuGrid& grid;
 	int width;
 	int height;
 
 public:
-	Solver(Grid<int>& start);
-	bool solve(int offset);
+	Solver(SudokuGrid& start);
+	bool solve();
+	bool solve(size_t index);
 
 private:
 	bool isAvailable(int x, int y, int number) const;
