@@ -21,6 +21,10 @@ private:
 	void eliminateAssigned();
 	void eliminateDangling();
 
+	void eliminateRowDangling();
+	void eliminateColumnDangling();
+	void eliminateBoxDangling();
+
 	bool transferSingularPossibilities();
 
 	void transferCountedEliminations(const std::map<int, std::vector<int>>& counters);

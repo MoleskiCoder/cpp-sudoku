@@ -43,61 +43,65 @@ int SudokuGrid::getOffset(const size_t index) const
 
 void SudokuGrid::eliminateDangling()
 {
-	// rows
-	{
-		for (auto y = 0; y < HEIGHT; ++y)
-		{
-			auto offset = y * DIMENSION;
-			std::map<int, std::vector<int>> counters;
-			for (auto x = 0; x < WIDTH; ++x)
-				adjustPossibleCounters(counters, offset++);
-			transferCountedEliminations(counters);
-		}
-	}
+	eliminateRowDangling();
+	eliminateColumnDangling();
+	eliminateBoxDangling();
+}
 
-	// columns
+void SudokuGrid::eliminateRowDangling()
+{
+	for (auto y = 0; y < HEIGHT; ++y)
 	{
+		auto offset = y * DIMENSION;
+		std::map<int, std::vector<int>> counters;
 		for (auto x = 0; x < WIDTH; ++x)
-		{
-			auto offset = x;
-			std::map<int, std::vector<int>> counters;
-			for (auto y = 0; y < HEIGHT; ++y)
-			{
-				adjustPossibleCounters(counters, offset);
-				offset += DIMENSION;
-			}
-			transferCountedEliminations(counters);
-		}
+			adjustPossibleCounters(counters, offset++);
+		transferCountedEliminations(counters);
 	}
+}
 
-	// boxes
+void SudokuGrid::eliminateColumnDangling()
+{
+	for (auto x = 0; x < WIDTH; ++x)
 	{
+		auto offset = x;
+		std::map<int, std::vector<int>> counters;
 		for (auto y = 0; y < HEIGHT; ++y)
 		{
-			for (auto x = 0; x < WIDTH; ++x)
+			adjustPossibleCounters(counters, offset);
+			offset += DIMENSION;
+		}
+		transferCountedEliminations(counters);
+	}
+}
+
+void SudokuGrid::eliminateBoxDangling()
+{
+	for (auto y = 0; y < HEIGHT; y += BOX_DIMENSION)
+	{
+		for (auto x = 0; x < WIDTH; x += BOX_DIMENSION)
+		{
+			std::map<int, std::vector<int>> counters;
+
+			auto boxStartX = x - x % BOX_DIMENSION;
+			auto boxStartY = y - y % BOX_DIMENSION;
+
+			auto boxX = boxStartX;
+			for (auto yOffset = 0; yOffset < BOX_DIMENSION; ++yOffset)
 			{
-				std::map<int, std::vector<int>> counters;
-
-				auto boxStartX = x - x % BOX_DIMENSION;
-				auto boxStartY = y - y % BOX_DIMENSION;
-
-				auto boxX = boxStartX;
-				for (auto yOffset = 0; yOffset < BOX_DIMENSION; ++yOffset)
-				{
-					auto boxY = yOffset + boxStartY;
-					auto offset = boxX + boxY * DIMENSION;
-					for (auto xOffset = 0; xOffset < BOX_DIMENSION; ++xOffset)
-						adjustPossibleCounters(counters, offset++);
-				}
-				transferCountedEliminations(counters);
+				auto boxY = yOffset + boxStartY;
+				auto offset = boxX + boxY * DIMENSION;
+				for (auto xOffset = 0; xOffset < BOX_DIMENSION; ++xOffset)
+					adjustPossibleCounters(counters, offset++);
 			}
+			transferCountedEliminations(counters);
 		}
 	}
 }
 
 void SudokuGrid::transferCountedEliminations(const std::map<int, std::vector<int>>& counters)
 {
-	for each (auto counter in counters)
+	for each (const auto& counter in counters)
 	{
 		if (counter.second.size() == 1)
 		{
@@ -138,14 +142,13 @@ bool SudokuGrid::transferSingularPossibilities()
 	bool transfer = false;
 	for (auto offset = 0; offset < CELL_COUNT; ++offset)
 	{
-		auto possible = possibles[offset];
+		auto& possible = possibles[offset];
 		if (possible.size() == 1)
 		{
 			auto singular = *(possible.begin());
 			set(offset, singular);
 			++eliminated;
 			possible.clear();
-			possibles[offset] = possible;
 			transfer = true;
 		}
 	}
