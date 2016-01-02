@@ -26,7 +26,7 @@ void SudokuGrid::eliminate()
 		eliminateDangling();
 	} while (transferSingularPossibilities());
 
-	for (auto i = 0; i < possibles.size(); ++i)
+	for (size_t i = 0; i < possibles.size(); ++i)
 		if (possibles[i].size() > 1)
 			offsets.push_back(i);
 
@@ -138,7 +138,6 @@ void SudokuGrid::eliminateAssigned()
 
 bool SudokuGrid::transferSingularPossibilities()
 {
-	long eliminated = 0;
 	bool transfer = false;
 	for (auto offset = 0; offset < CELL_COUNT; ++offset)
 	{
@@ -147,7 +146,6 @@ bool SudokuGrid::transferSingularPossibilities()
 		{
 			auto singular = *(possible.begin());
 			set(offset, singular);
-			++eliminated;
 			possible.clear();
 			transfer = true;
 		}
