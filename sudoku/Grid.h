@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Coordinate.h"
-
 #include <vector>
 #include <assert.h>
 
@@ -35,11 +33,6 @@ public:
 		return width;
 	}
 
-	void set(const Coordinate& coordinate, const T value)
-	{
-		set(getOffset(coordinate), value);
-	}
-
 	void set(const int x, const int y, const T value)
 	{
 		set(getOffset(x, y), value);
@@ -50,11 +43,6 @@ public:
 		values[offset] = value;
 	}
 
-	T get(const Coordinate& coordinate) const
-	{
-		return get(getOffset(coordinate));
-	}
-
 	T get(const int x, const int y) const
 	{
 		return get(getOffset(x, y));
@@ -63,11 +51,6 @@ public:
 	T get(const int offset) const
 	{
 		return values[offset];
-	}
-
-	int getOffset(const Coordinate& coordinate) const
-	{
-		return getOffset(coordinate.getX(), coordinate.getY());
 	}
 
 	int getOffset(const int x, const int y) const
