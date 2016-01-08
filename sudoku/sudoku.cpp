@@ -1,13 +1,13 @@
 #include "stdafx.h"
 
+#include "SudokuGrid.h"
+#include "Solver.h"
+
 #include <vector>
 #include <ctime>
 #include <iostream>
 
-#include "SudokuGrid.h"
-#include "Solver.h"
-
-int _tmain(int, _TCHAR*[])
+int main()
 {
 	// http://www.telegraph.co.uk/news/science/science-news/9359579/Worlds-hardest-sudoku-can-you-crack-it.html
 	std::vector<int> data =

@@ -17,7 +17,7 @@ public:
 		height = gridHeight;
 		assert(width == height);
 		assert(width * height == initial.size());
-		for each (T value in initial)
+		for (T value : initial)
 		{
 			values.push_back(value);
 		}

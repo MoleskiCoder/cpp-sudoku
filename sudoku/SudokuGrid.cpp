@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "SudokuGrid.h"
 
-#include <algorithm>
-#include <functional>
+#include <sstream>
 
 SudokuGrid::SudokuGrid(const std::vector<int>& initial)
 : Grid(WIDTH, HEIGHT, initial)
@@ -101,7 +100,7 @@ void SudokuGrid::eliminateBoxDangling()
 
 void SudokuGrid::transferCountedEliminations(const std::map<int, std::vector<int>>& counters)
 {
-	for each (const auto& counter in counters)
+	for (const auto& counter : counters)
 	{
 		if (counter.second.size() == 1)
 		{
@@ -115,7 +114,7 @@ void SudokuGrid::transferCountedEliminations(const std::map<int, std::vector<int
 
 void SudokuGrid::adjustPossibleCounters(std::map<int, std::vector<int>>& counters, const int offset)
 {
-	for each (auto possible in possibles[offset])
+	for (auto possible : possibles[offset])
 		counters[possible].push_back(offset);
 }
 
@@ -185,37 +184,34 @@ void SudokuGrid::clearBoxPossibilities(int boxStartX, int boxStartY, int number)
 
 std::string SudokuGrid::toString() const
 {
-	char buffer[100];
+	std::ostringstream output;
 
-	std::string output;
 	for (auto y = 0; y < HEIGHT; ++y)
 	{
-		output += "\n";
+		output << std::endl;
 		for (auto x = 0; x < WIDTH; ++x)
 		{
 			auto number = get(x, y);
-			output += ' ';
+			output << ' ';
 			if (number == UNASSIGNED)
 			{
-				output += '-';
+				output << '-';
 			}
 			else
 			{
-				_itoa_s(number, buffer, 100, DIMENSION + 1);
-				output += buffer;
+				output << std::hex << number;
 			}
-			output += ' ';
+			output << ' ';
 			if ((x + 1) % BOX_DIMENSION == 0 && (x + 1) < WIDTH)
 			{
-				output += '|';
+				output << '|';
 			}
 		}
 		if ((y + 1) % BOX_DIMENSION == 0 && (y + 1) < HEIGHT)
 		{
-			output += "\n --------+---------+--------";
+			output << std::endl <<  "--------+---------+--------";
 		}
-		output += '\n';
+		output << std::endl;
 	}
-	return output;
+	return output.str();
 }
-

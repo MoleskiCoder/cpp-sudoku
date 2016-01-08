@@ -47,7 +47,7 @@ public:
 		return offsets.size();
 	}
 
-	std::string SudokuGrid::toString() const;
+	std::string toString() const;
 
 	enum
 	{

@@ -1,12 +1,14 @@
 #pragma once
 
-#include "targetver.h"
-
-#include <stdio.h>
-#include <tchar.h>
+#include <sstream>
 
 #include <vector>
-#include <assert.h>
+#include <set>
+#include <map>
+
 #include <ctime>
 #include <iostream>
+
 #include <string>
+
+#include <assert.h>

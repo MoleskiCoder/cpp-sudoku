@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "Solver.h"
 
-#include <algorithm>
-
 /**
 * From: https://see.stanford.edu/materials/icspacs106b/H19-RecBacktrackExamples.pdf
 *
