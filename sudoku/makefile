@@ -1,16 +1,17 @@
-all : sudoku.exe
+SHELL = /bin/sh
 
-Solver.o : Solver.cpp
-	g++ -std=c++11 -c -o Solver.o Solver.cpp
+.SUFFIXES:
+.SUFFIXES: .cc .o
 
-SudokuGrid.o : SudokuGrid.cpp
-	g++ -std=c++11 -c -o SudokuGrid.o SudokuGrid.cpp
+CXXFLAGS += -std=c++11 -O3 -march=native
 
-sudoku.o : sudoku.cpp
-	g++ -std=c++11 -c -o sudoku.o sudoku.cpp
+all : sudoku
 
-sudoku.exe : sudoku.o Solver.o SudokuGrid.o
-	g++ sudoku.o Solver.o SudokuGrid.o -o sudoku.exe
+Solver.o : Solver.cc
+
+SudokuGrid.o : SudokuGrid.cc
+
+sudoku : Solver.o SudokuGrid.o
 
 .PHONY : clean
 clean : 

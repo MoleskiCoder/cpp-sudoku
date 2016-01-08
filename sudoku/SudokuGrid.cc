@@ -209,7 +209,7 @@ std::string SudokuGrid::toString() const
 		}
 		if ((y + 1) % BOX_DIMENSION == 0 && (y + 1) < HEIGHT)
 		{
-			output << std::endl <<  "--------+---------+--------";
+			output << std::endl <<  " --------+---------+--------";
 		}
 		output << std::endl;
 	}

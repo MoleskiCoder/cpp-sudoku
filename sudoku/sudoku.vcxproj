@@ -89,13 +89,13 @@
     <ClInclude Include="SudokuGrid.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Solver.cpp" />
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="Solver.cc" />
+    <ClCompile Include="stdafx.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="sudoku.cpp" />
-    <ClCompile Include="SudokuGrid.cpp" />
+    <ClCompile Include="sudoku.cc" />
+    <ClCompile Include="SudokuGrid.cc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

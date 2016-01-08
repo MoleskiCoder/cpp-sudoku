@@ -29,16 +29,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="Solver.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sudoku.cpp">
+    <ClCompile Include="stdafx.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Solver.cpp">
+    <ClCompile Include="sudoku.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SudokuGrid.cpp">
+    <ClCompile Include="SudokuGrid.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
