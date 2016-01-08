@@ -7,3 +7,5 @@ Release/
 *.opensdf
 *.sdf
 *.vcxproj.user
+*.o
+*.exe
