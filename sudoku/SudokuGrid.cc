@@ -24,11 +24,13 @@ void SudokuGrid::eliminate()
 		eliminateAssigned();
 		eliminateDangling();
 	} while (transferSingularPossibilities());
+}
 
+void SudokuGrid::createOffsets()
+{
 	for (size_t i = 0; i < possibles.size(); ++i)
 		if (possibles[i].size() > 1)
 			offsets.push_back(i);
-
 	offsetCount = offsets.size();
 }
 

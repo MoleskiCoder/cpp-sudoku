@@ -34,6 +34,7 @@ public:
 	SudokuGrid(const std::vector<int>& initial);
 
 	void eliminate();
+	void createOffsets();
 
 	const std::set<int>& getPossibilities(const int offset) const
 	{
@@ -44,7 +45,7 @@ public:
 
 	size_t getOffsetCount() const
 	{
-		return offsets.size();
+		return offsetCount;
 	}
 
 	std::string toString() const;

@@ -16,6 +16,7 @@ Solver::Solver(SudokuGrid& start)
 bool Solver::solve()
 {
 	grid.eliminate();
+	grid.createOffsets();
 	return solve(0);
 }
 
