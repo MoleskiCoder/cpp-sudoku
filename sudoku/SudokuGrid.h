@@ -7,12 +7,11 @@
 #include <map>
 #include <string>
 
-class SudokuGrid : public Grid<int>
-{
+class SudokuGrid final : public Grid<int> {
 private:
-	std::vector<std::set<int>> possibles;
-	std::vector<int> offsets;
-	size_t offsetCount;
+	std::vector<std::set<int>> _possibles;
+	std::vector<int> _offsets;
+	size_t _offsetCount;
 
 	void clearRowPossibles(int y, int number);
 	void clearColumnPossibles(int x, int number);
@@ -36,22 +35,23 @@ public:
 	void eliminate();
 	void createOffsets();
 
-	const std::set<int>& getPossibilities(const int offset) const
-	{
-		return possibles[offset];
+	[[nodiscard]] constexpr const auto& possibilities(const int offset) const noexcept {
+		return _possibles[offset];
 	}
 
-	int getOffset(size_t index) const;
-
-	size_t getOffsetCount() const
-	{
-		return offsetCount;
+	[[nodiscard]] constexpr auto offset(const size_t index) const noexcept {
+		if (index + 1 > _offsetCount)
+			return -1;
+		return _offsets[index];
 	}
 
-	std::string toString() const;
+	[[nodiscard]] constexpr auto offsetCount() const noexcept {
+		return _offsetCount;
+	}
 
-	enum
-	{
+	[[nodiscard]] std::string toString() const;
+
+	enum {
 		UNASSIGNED = 0,
 		DIMENSION = 9,
 		CELL_COUNT = DIMENSION * DIMENSION,

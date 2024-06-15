@@ -27,16 +27,16 @@ int main()
 	auto solver = Solver(puzzle);
 
 	auto start = std::clock();
+
 	bool solved = solver.solve();
 	auto finish = std::clock();
 
 	if (solved)
 	{
-		std::cout << puzzle.toString().c_str();
-
 		auto elapsed = finish - start;
 		auto seconds = (elapsed % CLOCKS_PER_SEC) / double(CLOCKS_PER_SEC) + (elapsed / CLOCKS_PER_SEC);
 
+		std::cout << puzzle.toString().c_str();
 		std::cout << std::endl << std::endl << "Time taken " << seconds << std::endl;
 	}
 	else

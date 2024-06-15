@@ -6,15 +6,12 @@
 *
 */
 
-Solver::Solver(SudokuGrid& start)
+Solver::Solver(SudokuGrid& start) noexcept
 :	grid(start),
-	width(grid.getWidth()),
-	height(grid.getHeight())
-{
-}
+	width(grid.width()),
+	height(grid.height()) {}
 
-bool Solver::solve()
-{
+bool Solver::solve() noexcept {
 	grid.eliminate();
 	grid.createOffsets();
 	return solve(0);
@@ -34,27 +31,21 @@ bool Solver::solve()
 * been examined and none worked out, return false to backtrack to previous
 * decision point.
 */
-bool Solver::solve(const size_t index)
-{
-	auto offset = grid.getOffset(index);
-
+bool Solver::solve(const size_t index) noexcept {
+	auto offset = grid.offset(index);
 	if (offset == -1)
 		return true; // success!
 
-	const auto& numbers = grid.getPossibilities(offset);
+	const auto& numbers = grid.possibilities(offset);
 
-	auto x = offset % SudokuGrid::DIMENSION;
-	auto y = offset / SudokuGrid::DIMENSION;
+	const auto x = offset % SudokuGrid::DIMENSION;
+	const auto y = offset / SudokuGrid::DIMENSION;
 
-	for (auto number : numbers)
-	{
-		if (isAvailable(x, y, number)) // if looks promising,
-		{
+	for (auto number : numbers) {
+		if (isAvailable(x, y, number)) { // if looks promising,
 			grid.set(offset, number); // make tentative assignment
 			if (solve(index + 1))
-			{
 				return true; // recur, if success, yay!
-			}
 		}
 	}
 	grid.set(offset, SudokuGrid::UNASSIGNED); // failure, unmake & try again
@@ -68,8 +59,7 @@ bool Solver::solve(const size_t index)
 * number to the given row,column location. As assignment is legal if it that
 * number is not already used in the row, column, or box.
 */
-bool Solver::isAvailable(int x, int y, int number) const
-{
+bool Solver::isAvailable(int x, int y, int number) const noexcept {
 	return !isUsedInRow(y, number)
 		&& !isUsedInColumn(x, number)
 		&& !isUsedInBox(x - x % SudokuGrid::BOX_DIMENSION, y - y % SudokuGrid::BOX_DIMENSION, number);
@@ -81,16 +71,11 @@ bool Solver::isAvailable(int x, int y, int number) const
 * Returns a boolean which indicates whether any assigned entry
 * in the specified row matches the given number.
 */
-bool Solver::isUsedInRow(const int y, const int number) const
-{
+bool Solver::isUsedInRow(const int y, const int number) const noexcept {
 	auto offset = y * SudokuGrid::DIMENSION;
 	for (auto x = 0; x < width; ++x)
-	{
 		if (grid.get(offset++) == number)
-		{
 			return true;
-		}
-	}
 	return false;
 }
 
@@ -100,15 +85,11 @@ bool Solver::isUsedInRow(const int y, const int number) const
 * Returns a boolean which indicates whether any assigned entry
 * in the specified column matches the given number.
 */
-bool Solver::isUsedInColumn(const int x, const int number) const
-{
+bool Solver::isUsedInColumn(const int x, const int number) const noexcept {
 	auto offset = x;
-	for (auto y = 0; y < height; ++y)
-	{
+	for (auto y = 0; y < height; ++y) {
 		if (grid.get(offset) == number)
-		{
 			return true;
-		}
 		offset += SudokuGrid::DIMENSION;
 	}
 	return false;
@@ -120,20 +101,14 @@ bool Solver::isUsedInColumn(const int x, const int number) const
 * Returns a boolean which indicates whether any assigned entry
 * within the specified BOX_DIMENSIONxBOX_DIMENSION box matches the given number.
 */
-bool Solver::isUsedInBox(const int boxStartX, const int boxStartY, const int number) const
-{
+bool Solver::isUsedInBox(const int boxStartX, const int boxStartY, const int number) const noexcept {
 	auto x = boxStartX;
-	for (auto yOffset = 0; yOffset < SudokuGrid::BOX_DIMENSION; ++yOffset)
-	{
-		auto y = yOffset + boxStartY;
+	for (auto yOffset = 0; yOffset < SudokuGrid::BOX_DIMENSION; ++yOffset) {
+		const auto y = yOffset + boxStartY;
 		auto offset = x + y*SudokuGrid::DIMENSION;
 		for (auto xOffset = 0; xOffset < SudokuGrid::BOX_DIMENSION; ++xOffset)
-		{
 			if (grid.get(offset++) == number)
-			{
 				return true;
-			}
-		}
 	}
 	return false;
 }

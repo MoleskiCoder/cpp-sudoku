@@ -10,17 +10,17 @@ class Solver
 {
 private:
 	SudokuGrid& grid;
-	int width;
-	int height;
+	const int width;
+	const int height;
 
 public:
-	Solver(SudokuGrid& start);
-	bool solve();
-	bool solve(size_t index);
+	Solver(SudokuGrid& start) noexcept;
+	bool solve() noexcept;
+	bool solve(size_t index) noexcept;
 
 private:
-	bool isAvailable(int x, int y, int number) const;
-	bool isUsedInRow(int y, int number) const;
-	bool isUsedInColumn(int x, int number) const;
-	bool isUsedInBox(int boxStartX, int boxStartY, int number) const;
+	[[nodiscard]] bool isAvailable(int x, int y, int number) const noexcept;
+	[[nodiscard]] bool isUsedInRow(int y, int number) const noexcept;
+	[[nodiscard]] bool isUsedInColumn(int x, int number) const noexcept;
+	[[nodiscard]] bool isUsedInBox(int boxStartX, int boxStartY, int number) const noexcept;
 };

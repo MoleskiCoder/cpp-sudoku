@@ -1,60 +1,46 @@
 #pragma once
 
 #include <vector>
-#include <assert.h>
+#include <cassert>
 
-template<typename T> class Grid
-{
+template<typename T> class Grid {
 private:
-	int width;
-	int height;
-	std::vector<T> values;
+	const int _width;
+	const int _height;
+	std::vector<T> _values;
 
 public:
 	Grid(const int gridWidth, const int gridHeight, const std::vector<T>& initial)
-	{
-		width = gridWidth;
-		height = gridHeight;
-		assert(width == height);
-		assert(width * height == initial.size());
-		for (T value : initial)
-		{
-			values.push_back(value);
-		}
+	: _width(gridWidth),
+	  _height(gridHeight) {
+		assert(_width == _height);
+		assert(_width * _height == initial.size());
+		_values.reserve(initial.size());
+		for (const T value : initial)
+			_values.push_back(value);
 	}
 
-	int getHeight() const
-	{
-		return height;
+	[[nodiscard]] constexpr int height() const noexcept { return _height; }
+	[[nodiscard]] constexpr int width() const noexcept { return _width; }
+
+	[[nodiscard]] constexpr auto offset(const int x, const int y) const noexcept {
+		return x + y * width();
 	}
 
-	int getWidth() const
-	{
-		return width;
+	constexpr void set(const int offset, const T value) noexcept {
+		_values[offset] = value;
 	}
 
-	void set(const int x, const int y, const T value)
-	{
-		set(getOffset(x, y), value);
+	constexpr void set(const int x, const int y, const T value) noexcept {
+		set(offset(x, y), value);
 	}
 
-	void set(const int offset, const T value)
-	{
-		values[offset] = value;
+
+	[[nodiscard]] constexpr T get(const int x, const int y) const noexcept {
+		return get(offset(x, y));
 	}
 
-	T get(const int x, const int y) const
-	{
-		return get(getOffset(x, y));
-	}
-
-	T get(const int offset) const
-	{
-		return values[offset];
-	}
-
-	int getOffset(const int x, const int y) const
-	{
-		return x + y * width;
+	[[nodiscard]] constexpr T get(const int offset) const noexcept {
+		return _values[offset];
 	}
 };
